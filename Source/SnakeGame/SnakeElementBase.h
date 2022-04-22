@@ -48,4 +48,7 @@ public:
 
 	UFUNCTION()
 		void ToggleCollision();
+
+	UFUNCTION()
+		void SetVisibility(bool IsTrue = true);
 };

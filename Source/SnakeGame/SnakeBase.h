@@ -32,7 +32,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		float ElementSize;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY()
 		float MovementSpeed;
 
 	UPROPERTY()
@@ -40,6 +40,7 @@ public:
 
 	UPROPERTY()
 		EMovementDirection LastMoveDirection;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

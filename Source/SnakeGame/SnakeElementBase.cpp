@@ -67,3 +67,7 @@ void ASnakeElementBase::ToggleCollision()
 
 }
 
+void ASnakeElementBase::SetVisibility(bool IsTrue)
+{
+	MeshComponent->SetVisibility(IsTrue);
+}
