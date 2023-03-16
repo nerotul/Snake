@@ -7,6 +7,10 @@
 #include "Interactable.h"
 #include "Food.generated.h"
 
+class AFloor;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDestroyed);
+
 UCLASS()
 class SNAKEGAME_API AFood : public AActor, public IInteractable
 {
@@ -25,5 +29,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void Interact(AActor* Interactor, bool bIsHead) override;
+
+	UPROPERTY(EditDefaultsOnly)
+		bool bIsFood;
+	UPROPERTY(EditDefaultsOnly)
+		bool bIsAccelerating;
+
+	FOnDestroyed OnDestroyed;
 
 };

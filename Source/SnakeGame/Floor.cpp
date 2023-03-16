@@ -4,6 +4,7 @@
 #include "Floor.h"
 #include "Engine/Classes/Components/StaticMeshComponent.h"
 #include "FloorBlock.h"
+#include "Food.h"
 
 
 // Sets default values
@@ -12,6 +13,7 @@ AFloor::AFloor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+
 }
 
 // Called when the game starts or when spawned
@@ -19,7 +21,8 @@ void AFloor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GenerateFloor(FloorSize, BlockSpawnLocation);
+	GenerateFloor(FloorSize, BlockSize, FloorElementClass, BlockSpawnLocation, FloorBlocksLocations);
+
 }
 
 // Called every frame
@@ -29,43 +32,60 @@ void AFloor::Tick(float DeltaTime)
 
 }
 
-void AFloor::GenerateFloor(int Size, FVector& SpawnLocation)
+void AFloor::GenerateFloor(int InFloorSize, float InBlockSize, TSubclassOf<AFloorBlock> InFloorElementClass, FVector& InOutSpawnLocation, TArray<FVector>& OutFloorBlocksLocations)
 {
 	FVector Scale(0.5f);
-	int SizeWithBorders = Size + 2;
-	SpawnLocation.X -= BlockSize * (SizeWithBorders / 2);
-	SpawnLocation.Y -= BlockSize * (SizeWithBorders / 2);
-	SpawnLocation.Z -= 55;
+	int SizeWithBorders = InFloorSize + 2;
+	InOutSpawnLocation.X -= InBlockSize * (SizeWithBorders / 2);
+	InOutSpawnLocation.Y -= InBlockSize * (SizeWithBorders / 2);
+	InOutSpawnLocation.Z -= 55;
 
 
-	if (FloorElementClass != nullptr)
+	if (IsValid(InFloorElementClass))
 	{
 		for (int i = 0; i < SizeWithBorders; i++)
 		{
 			for (int j = 0; j < SizeWithBorders; j++)
 			{
-				FTransform NewTransform(SpawnLocation);
+				FTransform NewTransform(InOutSpawnLocation);
 				NewTransform.SetScale3D(Scale);
 
-				AFloorBlock* NewFloorElement = GetWorld()->SpawnActor<AFloorBlock>(FloorElementClass, NewTransform);
-				FloorBlocksLocations.Add(SpawnLocation);
+				AFloorBlock* NewFloorElement = GetWorld()->SpawnActor<AFloorBlock>(InFloorElementClass, NewTransform);
+				OutFloorBlocksLocations.Add(InOutSpawnLocation);
 
 				if (i == 0 || j == 0 || i == SizeWithBorders - 1 || j == SizeWithBorders - 1)
 				{
-					FVector ObstacleLocation = SpawnLocation;
-					ObstacleLocation.Z += 50;
-					FTransform ObstacleTransform(ObstacleLocation);
-					ObstacleTransform.SetScale3D(Scale);
+					FVector BorderLocation = InOutSpawnLocation;
+					BorderLocation.Z += 50;
+					FTransform BorderTransform(BorderLocation);
+					BorderTransform.SetScale3D(Scale);
 
-					AFloorBlock* NewObstacleElement = GetWorld()->SpawnActor<AFloorBlock>(FloorElementClass, ObstacleTransform);
+					AFloorBlock* NewBorderElement = GetWorld()->SpawnActor<AFloorBlock>(InFloorElementClass, BorderTransform);
 				}
 
-				SpawnLocation.X += BlockSize;
+				InOutSpawnLocation.X += InBlockSize;
 
 			}
 
-			SpawnLocation.X -= (BlockSize * SizeWithBorders);
-			SpawnLocation.Y += BlockSize;
+			InOutSpawnLocation.X -= (InBlockSize * SizeWithBorders);
+			InOutSpawnLocation.Y += InBlockSize;
 		}
+	}
+
+	SpawnFood();
+}
+
+void AFloor::SpawnFood()
+{
+	if (IsValid(FoodClass))
+	{
+		int ArraySize = FloorBlocksLocations.Num();
+		int RandArrayIndex = (rand() % (ArraySize - 1));
+		FVector SpawnLocation = FloorBlocksLocations[RandArrayIndex];
+		SpawnLocation.Z += 60;
+		FTransform FoodTransform(SpawnLocation);
+
+		FoodPtr = GetWorld()->SpawnActor<AFood>(FoodClass, FoodTransform);
+		FoodPtr->OnDestroyed.AddDynamic(this, &AFloor::SpawnFood);
 	}
 }

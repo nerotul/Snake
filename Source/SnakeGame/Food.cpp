@@ -3,6 +3,7 @@
 
 #include "Food.h"
 #include "SnakeBase.h"
+#include "Floor.h"
 
 // Sets default values
 AFood::AFood()
@@ -33,9 +34,19 @@ void AFood::Interact(AActor* Interactor, bool bIsHead)
 		auto Snake = Cast<ASnakeBase>(Interactor);
 		if (IsValid(Snake))
 		{
-			Snake->AddSnakeElement();
+			if (bIsFood == true)
+			{
+				Snake->AddSnakeElement();
+			}
+
+			if (bIsAccelerating == true)
+			{
+				Snake->MovementSpeed -= 0.02;
+			}
+
+			FVector Test;
+			OnDestroyed.Broadcast();
 			Destroy();
 		}
 	}
 }
-

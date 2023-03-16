@@ -8,6 +8,7 @@
 #include "Floor.generated.h"
 
 class AFloorBlock;
+class AFood;
 
 UCLASS()
 class SNAKEGAME_API AFloor : public AActor
@@ -35,12 +36,18 @@ public:
 		float BlockSize = 60;
 
 
-	void GenerateFloor(int Size, FVector& SpawnLocation);
+	void GenerateFloor(int InFloorSize, float InBlockSize, TSubclassOf<AFloorBlock> InFloorElementClass, FVector& InOutSpawnLocation, TArray<FVector>& OutFloorBlocksLocations);
 
 	FVector BlockSpawnLocation;
 
 	TArray<FVector> FloorBlocksLocations;
 
 
+	UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<AFood> FoodClass;
 
+	AFood* FoodPtr;
+
+	UFUNCTION()
+		void SpawnFood();
 };
