@@ -30,10 +30,13 @@ public:
 
 	virtual void Interact(AActor* Interactor, bool bIsHead) override;
 
-	UPROPERTY(EditDefaultsOnly)
-		bool bIsFood;
-	UPROPERTY(EditDefaultsOnly)
+	void SetFoodBonus(bool& InOutIsAccelerating, bool& InOutIsDoubleScore);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsAccelerating;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		bool bIsDoubleScore;
+
 
 	FOnDestroyed OnDestroyed;
 

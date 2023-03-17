@@ -13,6 +13,7 @@ ASnakeElementBase::ASnakeElementBase()
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	MeshComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	MeshComponent->SetCollisionResponseToAllChannels(ECR_Overlap);
+	MeshComponent->SetVisibility(false);
 }
 
 // Called when the game starts or when spawned

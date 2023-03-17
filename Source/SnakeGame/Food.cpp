@@ -11,6 +11,7 @@ AFood::AFood()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	SetFoodBonus(bIsAccelerating, bIsDoubleScore);
 }
 
 // Called when the game starts or when spawned
@@ -34,19 +35,39 @@ void AFood::Interact(AActor* Interactor, bool bIsHead)
 		auto Snake = Cast<ASnakeBase>(Interactor);
 		if (IsValid(Snake))
 		{
-			if (bIsFood == true)
-			{
-				Snake->AddSnakeElement();
-			}
+			Snake->AddSnakeElement();
 
 			if (bIsAccelerating == true)
 			{
 				Snake->MovementSpeed -= 0.02;
 			}
 
-			FVector Test;
+			if (bIsDoubleScore == true)
+			{
+				
+			}
+
 			OnDestroyed.Broadcast();
 			Destroy();
+		}
+	}
+}
+
+void AFood::SetFoodBonus(bool& InOutIsAccelerating, bool& InOutIsDoubleScore)
+{
+	float BonusChance = FMath::FRandRange(1, 100);
+
+	if (BonusChance > 80)
+	{
+		float BonusType = FMath::FRandRange(1, 100);
+
+		if (BonusType > 70)
+		{
+			InOutIsAccelerating = true;
+		}
+		else
+		{
+			InOutIsDoubleScore = true;
 		}
 	}
 }

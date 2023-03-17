@@ -3,6 +3,7 @@
 
 #include "Floor.h"
 #include "Engine/Classes/Components/StaticMeshComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "FloorBlock.h"
 #include "Food.h"
 
@@ -85,7 +86,22 @@ void AFloor::SpawnFood()
 		SpawnLocation.Z += 60;
 		FTransform FoodTransform(SpawnLocation);
 
-		FoodPtr = GetWorld()->SpawnActor<AFood>(FoodClass, FoodTransform);
-		FoodPtr->OnDestroyed.AddDynamic(this, &AFloor::SpawnFood);
+		TArray<AActor*> Actors;
+		FHitResult Hit;
+		FVector EndTraceLocation = FVector(SpawnLocation.X, SpawnLocation.Y, SpawnLocation.Z * 100);
+
+		UKismetSystemLibrary::LineTraceSingle(GetWorld(), SpawnLocation, EndTraceLocation,
+			ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration,
+			Hit, true, FLinearColor::Green, FLinearColor::Red, 5.0f);
+
+		if (Hit.Actor == nullptr)
+		{
+			FoodPtr = GetWorld()->SpawnActor<AFood>(FoodClass, FoodTransform);
+			FoodPtr->OnDestroyed.AddDynamic(this, &AFloor::SpawnFood);
+		}
+		else
+		{
+			SpawnFood();
+		}
 	}
 }

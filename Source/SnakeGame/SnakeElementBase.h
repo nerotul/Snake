@@ -35,6 +35,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 		void SetFirstElementType();
+
 	void SetFirstElementType_Implementation();
 
 	virtual void Interact(AActor* Interact, bool bIsHead) override;

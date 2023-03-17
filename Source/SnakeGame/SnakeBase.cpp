@@ -12,7 +12,7 @@ ASnakeBase::ASnakeBase()
 	PrimaryActorTick.bCanEverTick = true;
 	ElementSize = 100.f;
 	MovementSpeed = 0.5;
-	LastMoveDirection = EMovementDirection::DOWN;
+	MoveDirection = EMovementDirection::DOWN;
 }
 
 // Called when the game starts or when spawned
@@ -20,6 +20,7 @@ void ASnakeBase::BeginPlay()
 {
 	Super::BeginPlay();
 	AddSnakeElement(5);
+	SnakeElements[0]->SetVisibility(true);
 }
 
 // Called every frame
@@ -52,7 +53,7 @@ void ASnakeBase::Move()
 {
 	FVector MovementVector(ForceInitToZero);
 
-	switch (LastMoveDirection)
+	switch (MoveDirection)
 	{
 	case EMovementDirection::UP:
 		MovementVector.X += ElementSize;
@@ -73,6 +74,12 @@ void ASnakeBase::Move()
 	for (int i = SnakeElements.Num() - 1; i > 0; i--)
 	{
 		auto CurrentElement = SnakeElements[i];
+
+		if (CurrentElement->MeshComponent->IsVisible() == false)
+		{
+			CurrentElement->MeshComponent->SetVisibility(true);
+		}
+
 		auto PrevElement = SnakeElements[i - 1];
 		FVector PrevLocation = PrevElement->GetActorLocation();
 		CurrentElement->SetActorLocation(PrevLocation);
@@ -81,6 +88,7 @@ void ASnakeBase::Move()
 
 	SnakeElements[0]->AddActorWorldOffset(MovementVector);
 	SnakeElements[0]->ToggleCollision();
+	LastMoveDirection = MoveDirection;
 }
 
 void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other)
