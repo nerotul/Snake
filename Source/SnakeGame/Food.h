@@ -32,12 +32,16 @@ public:
 
 	void SetFoodBonus(bool& InOutIsAccelerating, bool& InOutIsDoubleScore);
 
+	void DestroyExpiredFood();
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsAccelerating;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsDoubleScore;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+		float FoodExpirationTime = 10.0f;
 
 	FOnDestroyed OnDestroyed;
 
+	FTimerHandle TimerHandle_FoodLifeSpan;
 };

@@ -20,7 +20,8 @@ void ASnakeBase::BeginPlay()
 {
 	Super::BeginPlay();
 	AddSnakeElement(5);
-	SnakeElements[0]->SetVisibility(true);
+	SnakeElements[0]->MeshComponent->SetVisibility(true);
+
 }
 
 // Called every frame
