@@ -6,14 +6,13 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "FloorBlock.h"
 #include "Food.h"
-
+#include "ObstacleBlock.h"
 
 // Sets default values
 AFloor::AFloor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 
 }
 
@@ -74,6 +73,7 @@ void AFloor::GenerateFloor(int InFloorSize, float InBlockSize, TSubclassOf<AFloo
 	}
 
 	SpawnFood();
+	SpawnObstacle();
 }
 
 void AFloor::SpawnFood()
@@ -97,11 +97,71 @@ void AFloor::SpawnFood()
 		if (Hit.Actor == nullptr)
 		{
 			FoodPtr = GetWorld()->SpawnActor<AFood>(FoodClass, FoodTransform);
-			FoodPtr->OnDestroyed.AddDynamic(this, &AFloor::SpawnFood);
+			FoodPtr->OnFoodDestroyed.AddDynamic(this, &AFloor::SpawnFood);
 		}
 		else
 		{
 			SpawnFood();
+		}
+	}
+}
+
+void AFloor::SpawnObstacle()
+{
+	if (IsValid(ObstacleClass))
+	{
+		int ArraySize = FloorBlocksLocations.Num();
+		int RandArrayIndex = (rand() % (ArraySize - 1));
+		FVector SpawnLocation = FloorBlocksLocations[RandArrayIndex];
+		SpawnLocation.Z += 60;
+		FTransform ObstacleBlockTransform(SpawnLocation);
+
+		TArray<AActor*> Actors;
+		FHitResult Hit;
+		FVector EndTraceLocation = FVector(SpawnLocation.X, SpawnLocation.Y, SpawnLocation.Z * 100);
+
+		UKismetSystemLibrary::LineTraceSingle(GetWorld(), SpawnLocation, EndTraceLocation,
+			ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration,
+			Hit, true, FLinearColor::Blue, FLinearColor::Yellow, 5.0f);
+
+		if (Hit.Actor == nullptr)
+		{
+			ObstacleBlockPtr = GetWorld()->SpawnActor<AObstacleBlock>(ObstacleClass, ObstacleBlockTransform);
+			FVector PreviousBlockLocation = ObstacleBlockPtr->GetActorLocation();
+			ObstacleBlockPtr->OnObstacleDestroyed.AddDynamic(this, &AFloor::SpawnObstacle);
+
+			int32 AdditionalBlocksCount = FMath::RandRange(MinObstacleElementsCount, MaxObstacleElementsCount);
+
+			for (int i = 0; i < AdditionalBlocksCount - 1; i)
+			{
+				FVector AdditionalBlockLocation = PreviousBlockLocation;
+								
+				int32 XSign = FMath::RandRange(-1, 1);
+				AdditionalBlockLocation.X += (BlockSize * XSign);
+
+				int32 YSign = FMath::RandRange(-1, 1);
+				AdditionalBlockLocation.Y += (BlockSize * YSign);
+
+
+				FHitResult AdditionalHit;
+				FVector EndAdditionalTraceLocation = FVector(AdditionalBlockLocation.X, AdditionalBlockLocation.Y, AdditionalBlockLocation.Z * 100);
+				FTransform AdditionalObstacleTransform(AdditionalBlockLocation);
+
+				UKismetSystemLibrary::LineTraceSingle(GetWorld(), AdditionalBlockLocation, EndAdditionalTraceLocation,
+					ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration,
+					AdditionalHit, true, FLinearColor::Blue, FLinearColor::Yellow, 5.0f);
+
+				if (AdditionalHit.Actor == nullptr)
+				{
+					AObstacleBlock* AdditionalObstacleBlockPtr = GetWorld()->SpawnActor<AObstacleBlock>(ObstacleClass, AdditionalObstacleTransform);
+					PreviousBlockLocation = AdditionalObstacleBlockPtr->GetActorLocation();
+					i++;
+				}
+			}
+		}
+		else
+		{
+			SpawnObstacle();
 		}
 	}
 }

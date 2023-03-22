@@ -9,6 +9,7 @@
 
 class AFloorBlock;
 class AFood;
+class AObstacleBlock;
 
 UCLASS()
 class SNAKEGAME_API AFloor : public AActor
@@ -50,4 +51,18 @@ public:
 
 	UFUNCTION()
 		void SpawnFood();
+
+
+	UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<AObstacleBlock> ObstacleClass;
+
+	AObstacleBlock* ObstacleBlockPtr;
+
+	UPROPERTY(EditDefaultsOnly)
+		int32 MinObstacleElementsCount = 3;
+	UPROPERTY(EditDefaultsOnly)
+		int32 MaxObstacleElementsCount = 10;
+
+	UFUNCTION()
+		void SpawnObstacle();
 };

@@ -27,7 +27,6 @@ void AFood::BeginPlay()
 void AFood::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//this->SetActorTickInterval(600);
 
 }
 
@@ -50,7 +49,8 @@ void AFood::Interact(AActor* Interactor, bool bIsHead)
 				
 			}
 
-			OnDestroyed.Broadcast();
+			OnFoodDestroyed.Broadcast();
+			GetWorld()->GetTimerManager().ClearTimer(TimerHandle_FoodLifeSpan);
 			Destroy();
 		}
 	}
@@ -77,7 +77,7 @@ void AFood::SetFoodBonus(bool& InOutIsAccelerating, bool& InOutIsDoubleScore)
 
 void AFood::DestroyExpiredFood()
 {
-	OnDestroyed.Broadcast();
+	OnFoodDestroyed.Broadcast();
 	GetWorld()->GetTimerManager().ClearTimer(TimerHandle_FoodLifeSpan);
 	Destroy();
 }

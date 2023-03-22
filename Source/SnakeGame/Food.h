@@ -9,7 +9,7 @@
 
 class AFloor;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDestroyed);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFoodDestroyed);
 
 UCLASS()
 class SNAKEGAME_API AFood : public AActor, public IInteractable
@@ -41,7 +41,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		float FoodExpirationTime = 10.0f;
 
-	FOnDestroyed OnDestroyed;
+	FOnFoodDestroyed OnFoodDestroyed;
 
 	FTimerHandle TimerHandle_FoodLifeSpan;
 };
