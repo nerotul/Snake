@@ -73,7 +73,11 @@ void AFloor::GenerateFloor(int InFloorSize, float InBlockSize, TSubclassOf<AFloo
 	}
 
 	SpawnFood();
-	SpawnObstacle();
+
+	for (int i = 0; i < 5; i++)
+	{
+		SpawnObstacle();
+	}
 }
 
 void AFloor::SpawnFood()
@@ -132,15 +136,42 @@ void AFloor::SpawnObstacle()
 
 			int32 AdditionalBlocksCount = FMath::RandRange(MinObstacleElementsCount, MaxObstacleElementsCount);
 
-			for (int i = 0; i < AdditionalBlocksCount - 1; i)
+			for (int i = 0; i < AdditionalBlocksCount - 1; i++)
 			{
 				FVector AdditionalBlockLocation = PreviousBlockLocation;
-								
-				int32 XSign = FMath::RandRange(-1, 1);
-				AdditionalBlockLocation.X += (BlockSize * XSign);
+				
+				// Fully random spawn
+				//int32 XSign = FMath::RandRange(-1, 1);
+				//AdditionalBlockLocation.X += (BlockSize * XSign);
 
-				int32 YSign = FMath::RandRange(-1, 1);
-				AdditionalBlockLocation.Y += (BlockSize * YSign);
+				//int32 YSign = FMath::RandRange(-1, 1);
+				//AdditionalBlockLocation.Y += (BlockSize * YSign);
+
+				// Orthogonal spawn
+				bool IsX = FMath::RandBool();
+				bool IsPositive = FMath::RandBool();
+				if (IsX == true)
+				{
+					if (IsPositive == true)
+					{
+						AdditionalBlockLocation.X += BlockSize;
+					}
+					else
+					{
+						AdditionalBlockLocation.X -= BlockSize;
+					}
+				}
+				else
+				{
+					if (IsPositive == true)
+					{
+						AdditionalBlockLocation.Y += BlockSize;
+					}
+					else
+					{
+						AdditionalBlockLocation.Y -= BlockSize;
+					}
+				}
 
 
 				FHitResult AdditionalHit;
@@ -155,7 +186,6 @@ void AFloor::SpawnObstacle()
 				{
 					AObstacleBlock* AdditionalObstacleBlockPtr = GetWorld()->SpawnActor<AObstacleBlock>(ObstacleClass, AdditionalObstacleTransform);
 					PreviousBlockLocation = AdditionalObstacleBlockPtr->GetActorLocation();
-					i++;
 				}
 			}
 		}
