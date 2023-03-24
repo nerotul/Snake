@@ -7,6 +7,8 @@
 #include "FloorBlock.h"
 #include "Food.h"
 #include "ObstacleBlock.h"
+#include "SnakeElementBase.h"
+
 
 // Sets default values
 AFloor::AFloor()
@@ -74,7 +76,7 @@ void AFloor::GenerateFloor(int InFloorSize, float InBlockSize, TSubclassOf<AFloo
 
 	SpawnFood();
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < ObstacleGroupsPerSpawn; i++)
 	{
 		SpawnObstacle();
 	}
@@ -182,7 +184,14 @@ void AFloor::SpawnObstacle()
 					ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration,
 					AdditionalHit, true, FLinearColor::Blue, FLinearColor::Yellow, 5.0f);
 
-				if (AdditionalHit.Actor == nullptr)
+				const TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+				UClass* ActorsFilter = ASnakeElementBase::StaticClass();
+				TArray<AActor*> IgnoredActors;
+				TArray<AActor*> OutActors;
+
+				UKismetSystemLibrary::SphereOverlapActors(GetWorld(), AdditionalBlockLocation, 120, ObjectTypes, ActorsFilter, IgnoredActors, OutActors);
+
+				if (AdditionalHit.Actor == nullptr && OutActors.Num() == 0)
 				{
 					AObstacleBlock* AdditionalObstacleBlockPtr = GetWorld()->SpawnActor<AObstacleBlock>(ObstacleClass, AdditionalObstacleTransform);
 					PreviousBlockLocation = AdditionalObstacleBlockPtr->GetActorLocation();
