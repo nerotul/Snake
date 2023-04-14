@@ -17,6 +17,9 @@ enum class EMovementDirection
 	RIGHT
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDead);
+
+
 UCLASS()
 class SNAKEGAME_API ASnakeBase : public AActor
 {
@@ -52,10 +55,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void AddSnakeElement(int ElementsNum = 1);
+		void AddSnakeElement(int ElementsNum = 1);
 	UFUNCTION(BlueprintCallable)
-	void Move();
+		void Move();
 	UFUNCTION()
 		void SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other);
 
+	UFUNCTION()
+		void DestroySnake();
 };

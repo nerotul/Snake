@@ -4,6 +4,7 @@
 #include "Food.h"
 #include "SnakeBase.h"
 #include "Floor.h"
+#include "SnakeGameGameStateBase.h"
 
 // Sets default values
 AFood::AFood()
@@ -32,12 +33,17 @@ void AFood::Tick(float DeltaTime)
 
 void AFood::Interact(AActor* Interactor, bool bIsHead)
 {
+	ASnakeGameGameStateBase* GameStatePtr = GetWorld()->GetGameState<ASnakeGameGameStateBase>();
+
 	if (bIsHead)
 	{
 		auto Snake = Cast<ASnakeBase>(Interactor);
-		if (IsValid(Snake))
+		if (IsValid(Snake) && IsValid(GameStatePtr))
 		{
 			Snake->AddSnakeElement();
+			GameStatePtr->Score += 100;
+			GameStatePtr->OnScoreChange.Broadcast();
+			GameStatePtr->ResetHungerTimer();
 
 			if (bIsAccelerating == true)
 			{
@@ -46,7 +52,9 @@ void AFood::Interact(AActor* Interactor, bool bIsHead)
 
 			if (bIsDoubleScore == true)
 			{
-				
+				GameStatePtr->Score += 100;
+				GameStatePtr->OnScoreChange.Broadcast();
+
 			}
 
 			OnFoodDestroyed.Broadcast();

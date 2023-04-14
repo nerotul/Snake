@@ -4,6 +4,8 @@
 #include "SnakeBase.h"
 #include "SnakeElementBase.h"
 #include "Interactable.h"
+#include "SnakeGameGameStateBase.h"
+
 
 // Sets default values
 ASnakeBase::ASnakeBase()
@@ -21,6 +23,9 @@ void ASnakeBase::BeginPlay()
 	Super::BeginPlay();
 	AddSnakeElement(5);
 	SnakeElements[0]->MeshComponent->SetVisibility(true);
+
+	ASnakeGameGameStateBase* GameStatePtr = GetWorld()->GetGameState<ASnakeGameGameStateBase>();
+	GameStatePtr->OnStarved.AddDynamic(this, &ASnakeBase::DestroySnake);
 
 }
 
@@ -105,5 +110,16 @@ void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActo
 			InteractableInterface->Interact(this, bIsFirst);
 		}
 	}
+}
+
+void ASnakeBase::DestroySnake()
+{
+	ASnakeGameGameStateBase* GameStatePtr = GetWorld()->GetGameState<ASnakeGameGameStateBase>();
+	if (IsValid(GameStatePtr))
+	{
+		GameStatePtr->OnSnakeDead.Broadcast();
+	}
+
+	this->Destroy();
 }
 
