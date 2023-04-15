@@ -26,4 +26,6 @@ void ASnakeGameGameStateBase::Tick(float DeltaTime)
 void ASnakeGameGameStateBase::ResetHungerTimer()
 {
 	SnakeHungerTimer = SnakeMaxHungerTimer;
+	OnHungerChange.Broadcast();
+
 }

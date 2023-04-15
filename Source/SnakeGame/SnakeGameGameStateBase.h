@@ -28,20 +28,24 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	FOnHungerChange OnHungerChange;
+	UPROPERTY(BlueprintAssignable)
+		FOnHungerChange OnHungerChange;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		float SnakeMaxHungerTimer = 1000;
-
-	float SnakeHungerTimer = SnakeMaxHungerTimer;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		float SnakeHungerTimer = SnakeMaxHungerTimer;
 
 	void ResetHungerTimer();
 
-	FOnStarved OnStarved;
+	UPROPERTY(BlueprintAssignable)
+		FOnStarved OnStarved;
 
 	UPROPERTY(BlueprintReadOnly)
 		int Score = 0;
 
-	FOnScoreChange OnScoreChange;
-	FOnSnakeDead OnSnakeDead;
+	UPROPERTY(BlueprintAssignable)
+		FOnScoreChange OnScoreChange;
+	UPROPERTY(BlueprintAssignable)
+		FOnSnakeDead OnSnakeDead;
 
 };
