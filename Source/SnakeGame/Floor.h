@@ -37,7 +37,6 @@ public:
 	UPROPERTY(EditAnywhere)
 		float BlockSize = 60;
 
-
 	void GenerateFloor(int InFloorSize, float InBlockSize, TSubclassOf<AFloorBlock> InFloorElementClass, FVector& InOutSpawnLocation, TArray<FVector>& OutFloorBlocksLocations);
 
 	FVector BlockSpawnLocation;
@@ -68,4 +67,7 @@ public:
 
 	UFUNCTION()
 		void SpawnObstacle();
+
+	void InitialFoodObstacleSpawn();
+	FTimerHandle InitalDelay;
 };

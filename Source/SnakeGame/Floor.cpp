@@ -24,6 +24,7 @@ void AFloor::BeginPlay()
 	Super::BeginPlay();
 
 	GenerateFloor(FloorSize, BlockSize, FloorElementClass, BlockSpawnLocation, FloorBlocksLocations);
+	GetWorld()->GetTimerManager().SetTimer(InitalDelay, this, &AFloor::InitialFoodObstacleSpawn, 1, false, 0.2);
 
 }
 
@@ -74,12 +75,6 @@ void AFloor::GenerateFloor(int InFloorSize, float InBlockSize, TSubclassOf<AFloo
 		}
 	}
 
-	SpawnFood();
-
-	for (int i = 0; i < ObstacleGroupsPerSpawn; i++)
-	{
-		SpawnObstacle();
-	}
 }
 
 void AFloor::SpawnFood()
@@ -203,4 +198,15 @@ void AFloor::SpawnObstacle()
 			SpawnObstacle();
 		}
 	}
+}
+
+void AFloor::InitialFoodObstacleSpawn()
+{
+	SpawnFood();
+
+	for (int i = 0; i < ObstacleGroupsPerSpawn; i++)
+	{
+		SpawnObstacle();
+	}
+
 }

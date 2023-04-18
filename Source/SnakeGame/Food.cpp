@@ -5,6 +5,7 @@
 #include "SnakeBase.h"
 #include "Floor.h"
 #include "SnakeGameGameStateBase.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AFood::AFood()
@@ -62,6 +63,12 @@ void AFood::Interact(AActor* Interactor, bool bIsHead)
 			Destroy();
 		}
 	}
+
+	if (IsValid(EatenSound))
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, EatenSound, GetActorLocation());
+	}
+
 }
 
 void AFood::SetFoodBonus(bool& InOutIsAccelerating, bool& InOutIsDoubleScore)

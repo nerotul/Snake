@@ -44,4 +44,8 @@ public:
 	FOnFoodDestroyed OnFoodDestroyed;
 
 	FTimerHandle TimerHandle_FoodLifeSpan;
+
+	UPROPERTY(EditDefaultsOnly)
+		USoundBase* EatenSound = nullptr;
+
 };

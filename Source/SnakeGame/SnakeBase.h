@@ -63,4 +63,10 @@ public:
 
 	UFUNCTION()
 		void DestroySnake();
+
+	UPROPERTY(EditDefaultsOnly)
+		USoundBase* MoveSound = nullptr;
+	UPROPERTY(EditDefaultsOnly)
+		USoundBase* LoseSound = nullptr;
+
 };

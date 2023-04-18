@@ -5,6 +5,7 @@
 #include "SnakeElementBase.h"
 #include "Interactable.h"
 #include "SnakeGameGameStateBase.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -95,6 +96,11 @@ void ASnakeBase::Move()
 	SnakeElements[0]->AddActorWorldOffset(MovementVector);
 	SnakeElements[0]->ToggleCollision();
 	LastMoveDirection = MoveDirection;
+
+	if (IsValid(MoveSound))
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, MoveSound, GetActorLocation());
+	}
 }
 
 void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other)
@@ -114,6 +120,11 @@ void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActo
 
 void ASnakeBase::DestroySnake()
 {
+	if (IsValid(LoseSound))
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, LoseSound, GetActorLocation());
+	}
+
 	ASnakeGameGameStateBase* GameStatePtr = GetWorld()->GetGameState<ASnakeGameGameStateBase>();
 	if (IsValid(GameStatePtr))
 	{
