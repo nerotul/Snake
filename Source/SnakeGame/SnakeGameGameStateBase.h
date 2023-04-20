@@ -16,6 +16,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHungerChange);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnStarved);
 
 
+class USnakeSaveGame;
+
 UCLASS()
 class SNAKEGAME_API ASnakeGameGameStateBase : public AGameStateBase
 {
@@ -47,5 +49,15 @@ public:
 		FOnScoreChange OnScoreChange;
 	UPROPERTY(BlueprintAssignable)
 		FOnSnakeDead OnSnakeDead;
+
+	USnakeSaveGame* CurrentSaveGame;
+	UPROPERTY()
+		FString SlotName = "SnakeSave";
+	UPROPERTY(BlueprintReadOnly)
+		int BestScore;
+
+	void LoadSaveGame();
+
+	void SaveSaveGame();
 
 };

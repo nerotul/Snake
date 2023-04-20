@@ -3,3 +3,7 @@
 
 #include "SnakeSaveGame.h"
 
+USnakeSaveGame::USnakeSaveGame()
+{
+	BestScore = 0;
+}

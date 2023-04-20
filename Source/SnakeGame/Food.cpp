@@ -58,6 +58,7 @@ void AFood::Interact(AActor* Interactor, bool bIsHead)
 
 			}
 
+			GameStatePtr->SaveSaveGame();
 			OnFoodDestroyed.Broadcast();
 			GetWorld()->GetTimerManager().ClearTimer(TimerHandle_FoodLifeSpan);
 			Destroy();

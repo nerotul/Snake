@@ -14,4 +14,11 @@ class SNAKEGAME_API USnakeSaveGame : public USaveGame
 {
 	GENERATED_BODY()
 	
+public:
+
+	USnakeSaveGame();
+
+	UPROPERTY()
+		int BestScore;
+
 };
