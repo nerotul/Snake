@@ -32,7 +32,8 @@ public:
 
 	void SetFoodBonus(bool& InOutIsAccelerating, bool& InOutIsDoubleScore);
 
-	void DestroyExpiredFood();
+	UFUNCTION(BlueprintCallable)
+		void DestroyExpiredFood();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		bool bIsAccelerating;
