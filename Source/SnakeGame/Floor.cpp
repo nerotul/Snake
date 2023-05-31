@@ -91,9 +91,9 @@ void AFloor::SpawnFood()
 		FHitResult Hit;
 		FVector EndTraceLocation = FVector(SpawnLocation.X, SpawnLocation.Y, SpawnLocation.Z * 100);
 
-		UKismetSystemLibrary::LineTraceSingle(GetWorld(), SpawnLocation, EndTraceLocation,
-			ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration,
-			Hit, true, FLinearColor::Green, FLinearColor::Red, 5.0f);
+		//UKismetSystemLibrary::LineTraceSingle(GetWorld(), SpawnLocation, EndTraceLocation,
+		//	ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration,
+		//	Hit, true, FLinearColor::Green, FLinearColor::Red, 5.0f);
 
 		if (Hit.Actor == nullptr)
 		{
@@ -121,9 +121,9 @@ void AFloor::SpawnObstacle()
 		FHitResult Hit;
 		FVector EndTraceLocation = FVector(SpawnLocation.X, SpawnLocation.Y, SpawnLocation.Z * 100);
 
-		UKismetSystemLibrary::LineTraceSingle(GetWorld(), SpawnLocation, EndTraceLocation,
-			ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration,
-			Hit, true, FLinearColor::Blue, FLinearColor::Yellow, 5.0f);
+		//UKismetSystemLibrary::LineTraceSingle(GetWorld(), SpawnLocation, EndTraceLocation,
+		//	ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration,
+		//	Hit, true, FLinearColor::Blue, FLinearColor::Yellow, 5.0f);
 
 		if (Hit.Actor == nullptr)
 		{
@@ -175,9 +175,9 @@ void AFloor::SpawnObstacle()
 				FVector EndAdditionalTraceLocation = FVector(AdditionalBlockLocation.X, AdditionalBlockLocation.Y, AdditionalBlockLocation.Z * 100);
 				FTransform AdditionalObstacleTransform(AdditionalBlockLocation);
 
-				UKismetSystemLibrary::LineTraceSingle(GetWorld(), AdditionalBlockLocation, EndAdditionalTraceLocation,
-					ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration,
-					AdditionalHit, true, FLinearColor::Blue, FLinearColor::Yellow, 5.0f);
+				//UKismetSystemLibrary::LineTraceSingle(GetWorld(), AdditionalBlockLocation, EndAdditionalTraceLocation,
+				//	ETraceTypeQuery::TraceTypeQuery4, false, Actors, EDrawDebugTrace::ForDuration,
+				//	AdditionalHit, true, FLinearColor::Blue, FLinearColor::Yellow, 5.0f);
 
 				const TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 				UClass* ActorsFilter = ASnakeElementBase::StaticClass();
