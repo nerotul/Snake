@@ -1,5 +1,6 @@
 # Snake
 The game is a classical snake, which objective is to eat as much food as you can.
+Developed with Unreal Engine 4.27
 
 ## Main features
 - Random obstacle shape generation
